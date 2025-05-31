@@ -54,12 +54,15 @@ export default function Blog() {
   ];
     
   // Container styles
-  const containerStyles = {
-    maxWidth: '1200px',
-    margin: '0 auto',
-    padding: '0 20px'
-  };
-
+const containerStyles = {
+  maxWidth: '1200px',
+  marginLeft: 'auto',
+  marginRight: 'auto',
+  paddingLeft: '16px',
+  paddingRight: '16px',
+  boxSizing: 'border-box',
+  width: '100%'
+};
   // Grid styles
   const gridStyles = {
     display: 'grid',
@@ -136,56 +139,59 @@ export default function Blog() {
     margin: '0'
   };
 
-  return (
-    <div style={{ 
-      minHeight: '100vh', 
-      backgroundColor: '#ffffff',
-      fontFamily: `-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif`
-    }}>
-      <Header />
-      
-      {/* Colored header block */}
-      <div style={headerBlockStyles}>
-        <div style={containerStyles}>
-          <div style={pageHeaderStyles}>
-            <h1 style={mainTitleStyles}>Platform Features</h1>
-            <p style={subtitleStyles}>Designed for B2B manufacturing efficiency</p>
-          </div>
-        </div>
-      </div>
-      
-      <div style={containerStyles}>
-        <div style={gridStyles}>
-          {features.map(feature => (
-            <div 
-              key={feature.id} 
-              style={cardStyles}
-              onMouseEnter={(e) => {
-                e.currentTarget.style.transform = 'translateY(-5px)';
-                e.currentTarget.style.boxShadow = '0 6px 16px rgba(25, 118, 210, 0.15)';
-              }}
-              onMouseLeave={(e) => {
-                e.currentTarget.style.transform = 'translateY(0)';
-                e.currentTarget.style.boxShadow = '0 4px 12px rgba(0, 0, 0, 0.08)';
-              }}
-            >
-              <div style={imageContainerStyles}>
-                <Image 
-                  src={feature.image} 
-                  alt={feature.title}
-                  fill
-                  style={{ objectFit: 'cover' }}
-                  quality={100}
-                />
-              </div>
-              <div style={contentStyles}>
-                <h2 style={titleStyles}>{feature.title}</h2>
-                <p style={descStyles}>{feature.description}</p>
-              </div>
-            </div>
-          ))}
+ return (
+  <div style={{ 
+    minHeight: '100vh', 
+    overflowX: 'hidden',
+    backgroundColor: '#ffffff',
+    fontFamily: `-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif`,
+    boxSizing: 'border-box'
+  }}>
+    <Header />
+
+    {/* Colored header block */}
+    <div style={headerBlockStyles}>
+      <div style={{ ...containerStyles, boxSizing: 'border-box', width: '100%' }}>
+        <div style={pageHeaderStyles}>
+          <h1 style={mainTitleStyles}>Platform Features</h1>
+          <p style={subtitleStyles}>Designed for B2B manufacturing efficiency</p>
         </div>
       </div>
     </div>
-  );
-}
+
+    {/* Grid cards section */}
+    <div style={{ ...containerStyles, boxSizing: 'border-box', width: '100%' }}>
+      <div style={gridStyles}>
+        {features.map(feature => (
+          <div 
+            key={feature.id} 
+            style={cardStyles}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.transform = 'translateY(-5px)';
+              e.currentTarget.style.boxShadow = '0 6px 16px rgba(25, 118, 210, 0.15)';
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.transform = 'translateY(0)';
+              e.currentTarget.style.boxShadow = '0 4px 12px rgba(0, 0, 0, 0.08)';
+            }}
+          >
+            <div style={imageContainerStyles}>
+              <Image 
+                src={feature.image} 
+                alt={feature.title}
+                fill
+                style={{ objectFit: 'cover' }}
+                quality={100}
+                sizes="(max-width: 768px) 100vw, 50vw"
+              />
+            </div>
+            <div style={contentStyles}>
+              <h2 style={titleStyles}>{feature.title}</h2>
+              <p style={descStyles}>{feature.description}</p>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  </div>
+)};
