@@ -46,8 +46,7 @@ export function Hero() {
       const emailResponse = await emailjs.send(
         "service_ntvp4mj",      // ✅ Service ID
         "template_jvl0c9s",     // ✅ Template ID
-        formData,               // ✅ Must match template variables
-        "ui57YC-hry6CSdC0a"     // ✅ Public Key
+        formData
       );
 
       console.log("Email sent successfully:", emailResponse);
