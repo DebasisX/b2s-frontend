@@ -1,22 +1,23 @@
 "use client";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import emailjs from 'emailjs-com';
 
 export function Hero() {
   const [showForm, setShowForm] = useState(false);
-  const [formData, setFormData] = useState({ name: "", email: "", phone: "", company: "", address: "" });
+  const [formData, setFormData] = useState({
+    name: "",
+    email: "",
+    phone: "",
+    company: "",
+    address: ""
+  });
   const [submitted, setSubmitted] = useState(false);
   const [alreadySubmitted, setAlreadySubmitted] = useState(false);
 
-  useEffect(() => {
-    const sentEmails = JSON.parse(localStorage.getItem("submittedEmails") || "[]");
-    if (sentEmails.includes(formData.email)) {
-      setAlreadySubmitted(true);
-    }
-  }, [formData.email]);
-
   const handleClick = () => {
     setShowForm(true);
+    setSubmitted(false);
+    setAlreadySubmitted(false);
   };
 
   const handleChange = (e) => {
@@ -29,9 +30,9 @@ export function Hero() {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    const sentEmails = JSON.parse(localStorage.getItem("submittedEmails") || "[]");
+    const submittedEmails = JSON.parse(localStorage.getItem("submittedEmails") || "{}");
 
-    if (sentEmails.includes(formData.email)) {
+    if (submittedEmails[formData.email]) {
       setAlreadySubmitted(true);
       return;
     }
@@ -46,8 +47,10 @@ export function Hero() {
 
       console.log('Email sent successfully:', emailResponse);
 
-      // Save email to prevent reuse
-      localStorage.setItem("submittedEmails", JSON.stringify([...sentEmails, formData.email]));
+      // Mark email as submitted
+      submittedEmails[formData.email] = true;
+      localStorage.setItem("submittedEmails", JSON.stringify(submittedEmails));
+
       setSubmitted(true);
     } catch (error) {
       console.error("Email send error:", error);
@@ -57,26 +60,71 @@ export function Hero() {
 
   return (
     <section className="bg-blue-700 text-white px-6 py-20 text-center relative">
-      <br /><br />
       <h1 className="text-4xl font-bold mb-4">B2S: Bridging Brands to Retailers</h1>
       <p className="mb-6 text-lg max-w-5xl mx-auto">
         A smart platform that connects brands directly with retailers and local dealers, removing middlemen and simplifying operations.
         Powered by AI, it offers GST billing, real-time delivery tracking, and secure, seamless transactions.
       </p>
 
-      <a className="bg-white text-blue-700 font-bold px-6 py-3 rounded hover:bg-gray-100 transition"
-        href="mailto:b2s.co.in@gmail.com"> Contact Us!
-      </a>
+      <button
+        onClick={handleClick}
+        className="bg-white text-blue-700 font-bold px-6 py-3 rounded hover:bg-gray-100 transition"
+      >
+        Contact Us!
+      </button>
 
       {showForm && !submitted && !alreadySubmitted && (
         <form onSubmit={handleSubmit} className="space-y-4 max-w-md mx-auto mt-6">
-          <input type="text" name="name" placeholder="Your Name" value={formData.name} onChange={handleChange} required className="w-full px-4 py-2 rounded text-blue-900" />
-          <input type="email" name="email" placeholder="Your Email" value={formData.email} onChange={handleChange} required className="w-full px-4 py-2 rounded text-blue-900" />
-          <input type="text" name="phone" placeholder="Your Phone No." value={formData.phone} onChange={handleChange} required className="w-full px-4 py-2 rounded text-blue-900" />
-          <input type="text" name="company" placeholder="Your Company Name" value={formData.company} onChange={handleChange} required className="w-full px-4 py-2 rounded text-blue-900" />
-          <input type="text" name="address" placeholder="Your Address" value={formData.address} onChange={handleChange} required className="w-full px-4 py-2 rounded text-blue-900" />
+          <input
+            type="text"
+            name="name"
+            placeholder="Your Name"
+            value={formData.name}
+            onChange={handleChange}
+            required
+            className="w-full px-4 py-2 rounded text-blue-900"
+          />
+          <input
+            type="email"
+            name="email"
+            placeholder="Your Email"
+            value={formData.email}
+            onChange={handleChange}
+            required
+            className="w-full px-4 py-2 rounded text-blue-900"
+          />
+          <input
+            type="text"
+            name="phone"
+            placeholder="Your Phone No."
+            value={formData.phone}
+            onChange={handleChange}
+            required
+            className="w-full px-4 py-2 rounded text-blue-900"
+          />
+          <input
+            type="text"
+            name="company"
+            placeholder="Your Company Name"
+            value={formData.company}
+            onChange={handleChange}
+            required
+            className="w-full px-4 py-2 rounded text-blue-900"
+          />
+          <input
+            type="text"
+            name="address"
+            placeholder="Your Address"
+            value={formData.address}
+            onChange={handleChange}
+            required
+            className="w-full px-4 py-2 rounded text-blue-900"
+          />
 
-          <button type="submit" className="bg-white text-blue-900 font-bold px-6 py-3 rounded hover:bg-gray-100 transition">
+          <button
+            type="submit"
+            className="bg-white text-blue-900 font-bold px-6 py-3 rounded hover:bg-gray-100 transition"
+          >
             Send
           </button>
         </form>
