@@ -1,5 +1,5 @@
 "use client";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import emailjs from 'emailjs-com';
 
 export function Hero() {
@@ -13,6 +13,11 @@ export function Hero() {
   });
   const [submitted, setSubmitted] = useState(false);
   const [alreadySubmitted, setAlreadySubmitted] = useState(false);
+
+  // ✅ Initialize EmailJS
+  useEffect(() => {
+    emailjs.init("ui57YC-hry6CSdC0a"); // Replace with your actual Public Key
+  }, []);
 
   const handleClick = () => {
     setShowForm(true);
@@ -39,15 +44,15 @@ export function Hero() {
 
     try {
       const emailResponse = await emailjs.send(
-        'service_ntvp4mj',
-        'template_jvl0c9s',
-        formData,
-        'ui57YC-hry6CSdC0a'
+        "service_ntvp4mj",      // ✅ Service ID
+        "template_jvl0c9s",     // ✅ Template ID
+        formData,               // ✅ Must match template variables
+        "ui57YC-hry6CSdC0a"     // ✅ Public Key
       );
 
-      console.log('Email sent successfully:', emailResponse);
+      console.log("Email sent successfully:", emailResponse);
 
-      // Mark email as submitted
+      // ✅ Save email to localStorage to prevent spamming
       submittedEmails[formData.email] = true;
       localStorage.setItem("submittedEmails", JSON.stringify(submittedEmails));
 
