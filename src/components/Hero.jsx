@@ -1,5 +1,5 @@
-"use client";Add commentMore actions
-import { use, useState } from "react";
+"use client";
+import { useState } from "react";
 import emailjs from 'emailjs-com';
 
 export function Hero() {
