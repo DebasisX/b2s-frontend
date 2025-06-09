@@ -33,8 +33,8 @@ export function Hero() {
     try {
       // Send email with Public Key directly
       const response = await emailjs.send(
-        'service_gapi6hn',        // Service ID
-        'template_x4b8m5b',       // Template ID
+        'service_ntvp4mj',        // Service ID
+        'template_jvl0c9s',       // Template ID
         {
           name: formData.name,
           email: formData.email,
@@ -42,7 +42,7 @@ export function Hero() {
           company: formData.company,
           address: formData.address,
         },
-        '3ohpzHPBNDz5G1sIV'       // Public Key
+        'chlo41eWOmEz5Xmob'       // Public Key
       );
 
       console.log('Email sent successfully:', response);
