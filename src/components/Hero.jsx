@@ -30,10 +30,12 @@ export function Hero() {
       return;
     }
 
+
+
     try {
       // Send email with Public Key directly
       const response = await emailjs.send(
-        'service_ntvp4mj',        // Service ID
+        'service_1o2gqon',        // Service ID
         'template_jvl0c9s',       // Template ID
         {
           name: formData.name,
