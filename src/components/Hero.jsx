@@ -1,42 +1,31 @@
-"use client";
-import { useState } from "react";
+"use client";Add commentMore actions
+import { use, useState } from "react";
 import emailjs from 'emailjs-com';
 
 export function Hero() {
   const [showForm, setShowForm] = useState(false);
-  const [formData, setFormData] = useState({
-    name: "", email: "", phone: "", company: "", address: ""
-  });
+  const [formData, setFormData] = useState({ name: "", email: "", phone: "", company: "", address: "" });
   const [submitted, setSubmitted] = useState(false);
-  const [alreadySubmitted, setAlreadySubmitted] = useState(false);
 
   const handleClick = () => {
-    setShowForm(true);
-    setSubmitted(false);
-    setAlreadySubmitted(false);
+    setShowForm(true); // Show the form instead of mailto link
   };
 
   const handleChange = (e) => {
-    setFormData(prev => ({ ...prev, [e.target.name]: e.target.value }));
+    setFormData((prev) => ({
+      ...prev,
+      [e.target.name]: e.target.value,
+    }));
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    // Prevent duplicate submissions
-    const submittedEmails = JSON.parse(localStorage.getItem("submittedEmails") || "{}");
-    if (submittedEmails[formData.email]) {
-      setAlreadySubmitted(true);
-      return;
-    }
-
-
-
     try {
-      // Send email with Public Key directly
-      const response = await emailjs.send(
-        'service_1o2gqon',        // Service ID
-        'template_jvl0c9s',       // Template ID
+      // Send email via EmailJS
+      const emailResponse = await emailjs.send(
+        'service_1o2gqon',           // Replace with your actual EmailJS service ID
+        'template_jvl0c9s',          // Replace with your actual template ID
         {
           name: formData.name,
           email: formData.email,
@@ -44,37 +33,34 @@ export function Hero() {
           company: formData.company,
           address: formData.address,
         },
-        'chlo41eWOmEz5Xmob'       // Public Key
+        'chlo41eWOmEz5Xmob'          // Replace with your actual EmailJS public key
       );
 
-      console.log('Email sent successfully:', response);
-
-      submittedEmails[formData.email] = true;
-      localStorage.setItem("submittedEmails", JSON.stringify(submittedEmails));
-
+      console.log('Email sent successfully:', emailResponse);
       setSubmitted(true);
     } catch (error) {
-      console.error('Email send error:', error);
-      alert('Failed to submit form. Please try again.');
+      console.error("Error during submission or email:", error);
+      alert("Failed to submit form. Please try again.");
     }
   };
 
   return (
     <section className="bg-blue-700 text-white px-6 py-20 text-center relative">
+      <br></br> <br></br>
       <h1 className="text-4xl font-bold mb-4">B2S: Bridging Brands to Retailers</h1>
+      
       <p className="mb-6 text-lg max-w-5xl mx-auto">
-        A smart platform that connects brands directly with retailers and local dealers, removing middlemen and simplifying operations.
-        Powered by AI, it offers GST billing, real-time delivery tracking, and secure, seamless transactions.
-      </p>
+  A smart platform that connects brands directly with retailers and local dealers, removing middlemen and simplifying operations.
+  Powered by AI, it offers GST billing, real-time delivery tracking, and secure, seamless transactions.
+</p>
 
-      <button
-        onClick={handleClick}
-        className="bg-white text-blue-700 font-bold px-6 py-3 rounded hover:bg-gray-100 transition"
-      >
-        Contact Us!
-      </button>
+      <br></br>
+        <a className="bg-white text-blue-700 font-bold px-6 py-3 rounded hover:bg-gray-100 transition"
+          href="mailto:b2s.co.in@gmail.com"> Contact Us!
+        </a>
+      
 
-      {showForm && !submitted && !alreadySubmitted && (
+      {showForm && !submitted && (
         <form onSubmit={handleSubmit} className="space-y-4 max-w-md mx-auto mt-6">
           <input
             type="text"
@@ -120,7 +106,7 @@ export function Hero() {
             onChange={handleChange}
             required
             className="w-full px-4 py-2 rounded text-blue-900"
-          />
+          />          
 
           <button
             type="submit"
