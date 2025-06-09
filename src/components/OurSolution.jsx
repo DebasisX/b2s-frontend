@@ -1,6 +1,9 @@
 "use client";
 import { useState } from "react";
-import emailjs from "emailjs-com";
+import { send, init } from "@emailjs/browser";
+
+// Initialize EmailJS with your public key
+init("chlo41eWOmEz5Xmob"); // ✅ Replace with your actual public key
 
 export function OurSolution() {
   const [showForm, setShowForm] = useState(false);
@@ -26,18 +29,18 @@ export function OurSolution() {
     e.preventDefault();
 
     try {
-      const emailResponse = await emailjs.send(
-        "service_gapi6hn",     // ✅ Replace with your actual service ID
-        "template_x4b8m5b",    // ✅ Replace with your actual template ID
-        formData,
-        "3ohpzHPBNDz5G1sIV"    // ✅ Replace with your actual public key
+      console.log("Sending email with data:", formData);
+      const emailResponse = await send(
+        "service_1o2gqon",     // ✅ Make sure this matches the ID from dashboard
+        "template_jvl0c9s",    // ✅ Ensure this is also correct
+        formData
       );
 
       console.log("Email sent successfully:", emailResponse);
       setSubmitted(true);
     } catch (error) {
       console.error("Email send error:", error);
-      alert("Failed to send email. Please try again.");
+      alert("Failed to send email. Please check credentials or try again.");
     }
   };
 
@@ -50,7 +53,8 @@ export function OurSolution() {
             Empowering Brands, Simplifying Retail
           </h2>
           <p className="text-gray-700 text-lg leading-relaxed mb-6">
-            We connect brands with retailers and local dealers, enabling seamless orders, hassle-free payments, and real-time communication. Our smart platform provides powerful tools to boost sales, gain valuable insights, and effortlessly grow your network for lasting business success.</p>
+            We connect brands with retailers and local dealers, enabling seamless orders, hassle-free payments, and real-time communication. Our smart platform provides powerful tools to boost sales, gain valuable insights, and effortlessly grow your network for lasting business success.
+          </p>
 
           {/* Button & Form */}
           {!showForm && !submitted && (
