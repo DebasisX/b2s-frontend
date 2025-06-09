@@ -1,23 +1,14 @@
 "use client";
-import { useEffect, useState } from "react";
-import { init, send } from '@emailjs/browser';
+import { useState } from "react";
+import emailjs from 'emailjs-com';
 
 export function Hero() {
   const [showForm, setShowForm] = useState(false);
   const [formData, setFormData] = useState({
-    name: "",
-    email: "",
-    phone: "",
-    company: "",
-    address: ""
+    name: "", email: "", phone: "", company: "", address: ""
   });
   const [submitted, setSubmitted] = useState(false);
   const [alreadySubmitted, setAlreadySubmitted] = useState(false);
-
-  // Initialize EmailJS SDK with your Public Key
-  useEffect(() => {
-    init("ui57YC-hry6CSdC0a"); // Public Key (User ID)
-  }, []);
 
   const handleClick = () => {
     setShowForm(true);
@@ -32,7 +23,7 @@ export function Hero() {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    // Prevent duplicate submissions by email
+    // Prevent duplicate submissions
     const submittedEmails = JSON.parse(localStorage.getItem("submittedEmails") || "{}");
     if (submittedEmails[formData.email]) {
       setAlreadySubmitted(true);
@@ -40,23 +31,29 @@ export function Hero() {
     }
 
     try {
-      // Send email via EmailJS
-      const response = await send(
-        "service_ntvp4mj",      // Service ID
-        "template_jvl0c9s",     // Template ID
-        formData                 // Template parameters
+      // Send email with Public Key directly
+      const response = await emailjs.send(
+        'service_gapi6hn',        // Service ID
+        'template_x4b8m5b',       // Template ID
+        {
+          name: formData.name,
+          email: formData.email,
+          phone: formData.phone,
+          company: formData.company,
+          address: formData.address,
+        },
+        '3ohpzHPBNDz5G1sIV'       // Public Key
       );
 
-      console.log("Email sent successfully:", response);
+      console.log('Email sent successfully:', response);
 
-      // Mark email as used
       submittedEmails[formData.email] = true;
       localStorage.setItem("submittedEmails", JSON.stringify(submittedEmails));
 
       setSubmitted(true);
-    } catch (err) {
-      console.error("Email send error:", err.status, err.text);
-      alert("Failed to submit form. Please try again.");
+    } catch (error) {
+      console.error('Email send error:', error);
+      alert('Failed to submit form. Please try again.');
     }
   };
 
@@ -134,13 +131,7 @@ export function Hero() {
 
       {submitted && (
         <p className="mt-6 text-green-300 font-semibold">
-          ✅ Thank you! We've received your info.
-        </p>
-      )}
-
-      {alreadySubmitted && !submitted && (
-        <p className="mt-6 text-yellow-200 font-semibold">
-          ⚠️ This email has already been used to submit a request.
+          Thank you! We've received your info.
         </p>
       )}
     </section>
