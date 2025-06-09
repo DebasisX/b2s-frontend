@@ -1,5 +1,5 @@
 "use client";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import emailjs from "emailjs-com";
 
 export function OurSolution() {
@@ -12,6 +12,15 @@ export function OurSolution() {
     address: "",
   });
   const [submitted, setSubmitted] = useState(false);
+  const [alreadySubmitted, setAlreadySubmitted] = useState(false);
+
+  useEffect(() => {
+    const submittedEmails = JSON.parse(localStorage.getItem("submittedEmails") || "[]");
+    if (formData.email && submittedEmails.includes(formData.email)) {
+      setAlreadySubmitted(true);
+      setSubmitted(true);
+    }
+  }, [formData.email]);
 
   const handleClick = () => setShowForm(true);
 
@@ -25,15 +34,26 @@ export function OurSolution() {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
+    const submittedEmails = JSON.parse(localStorage.getItem("submittedEmails") || "[]");
+
+    if (submittedEmails.includes(formData.email)) {
+      alert("This email has already been used to book a demo.");
+      setAlreadySubmitted(true);
+      setSubmitted(true);
+      return;
+    }
+
     try {
       const emailResponse = await emailjs.send(
-        "service_1o2gqon",     // ✅ Replace with your actual service ID
-        "template_jvl0c9s",    // ✅ Replace with your actual template ID
+        "service_1o2gqon",
+        "template_jvl0c9s",
         formData,
-        "chlo41eWOmEz5Xmob"    // ✅ Replace with your actual public key
+        "chlo41eWOmEz5Xmob"
       );
 
       console.log("Email sent successfully:", emailResponse);
+      submittedEmails.push(formData.email);
+      localStorage.setItem("submittedEmails", JSON.stringify(submittedEmails));
       setSubmitted(true);
     } catch (error) {
       console.error("Email send error:", error);
@@ -50,7 +70,8 @@ export function OurSolution() {
             Empowering Brands, Simplifying Retail
           </h2>
           <p className="text-gray-700 text-lg leading-relaxed mb-6">
-            We connect brands with retailers and local dealers, enabling seamless orders, hassle-free payments, and real-time communication. Our smart platform provides powerful tools to boost sales, gain valuable insights, and effortlessly grow your network for lasting business success.</p>
+            We connect brands with retailers and local dealers, enabling seamless orders, hassle-free payments, and real-time communication. Our smart platform provides powerful tools to boost sales, gain valuable insights, and effortlessly grow your network for lasting business success.
+          </p>
 
           {/* Button & Form */}
           {!showForm && !submitted && (
@@ -120,7 +141,9 @@ export function OurSolution() {
 
           {submitted && (
             <p className="mt-6 text-green-600 font-semibold">
-              Thank you! We've received your info.
+              {alreadySubmitted
+                ? "This email has already submitted the form."
+                : "Thank you! We've received your info."}
             </p>
           )}
         </div>
